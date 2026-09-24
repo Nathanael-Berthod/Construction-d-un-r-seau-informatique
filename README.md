@@ -1,4 +1,4 @@
-# SAE2.01 — Construire un réseau informatique
+Construire un réseau informatique
 
 > **BUT Réseaux & Télécommunications — IUT de Roanne — Semestre 2**
 > Auteur : Nathanael Berthod (R&T 1 / B2)
