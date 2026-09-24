@@ -1,0 +1,64 @@
+ACL1
+conf t
+ip access-list extended ACL1_FTP
+permit tcp 172.16.105.64  0.0.0.31 host 172.16.102.70 eq ftp  
+permit tcp 172.16.105.0   0.0.0.63 host 172.16.102.70 eq ftp  
+permit tcp 172.16.68.64   0.0.0.31 host 172.16.102.70 eq ftp  
+permit tcp 172.16.68.0    0.0.0.63 host 172.16.102.70 eq ftp  
+permit tcp 172.16.9.0     0.0.0.127 host 172.16.102.70 eq ftp
+permit tcp 172.16.8.0     0.0.0.255 host 172.16.102.70 eq ftp
+permit tcp 172.16.102.64  0.0.0.63 host 172.16.102.70 eq ftp 
+permit tcp 172.16.102.0   0.0.0.63 host 172.16.102.70 eq ftp
+deny ip any 172.16.102.64 0.0.0.63 
+
+int gi0/0.20
+ip access-group acl1_ftp in
+int gi0/0.100
+ip access-group acl1_ftp in
+
+ACL2
+conf t
+ip access-list extended acl2_admin
+deny ip any 172.16.105.96 0.0.0.15 
+deny ip any 172.16.68.96 0.0.0.15    
+deny ip any 172.16.9.128 0.0.0.15   
+deny ip any 172.16.102.128 0.0.0.31  
+permit tcp any any eq www
+permit tcp any any eq https
+permit udp any any eq domain
+
+int gi0/0.10
+ip access-group acl2_admin in
+int gi0/1
+ip access-group acl2_admin in
+
+ACL3
+conf t
+ip access-list extended acl3_tftp
+permit udp 172.16.105.96 0.0.0.15 host 172.16.105.70 eq 69  
+permit udp 172.16.68.96  0.0.0.15 host 172.16.68.70 eq 69   
+permit udp 172.16.9.128  0.0.0.15 host 172.16.9.70 eq 69    
+permit udp 172.16.102.128 0.0.0.31 host 172.16.102.70 eq 69 
+permit icmp any any echo
+permit icmp any any echo-reply
+deny ip any any
+!
+int gi0/0.20
+ip access-group acl3_tftp in
+
+ACL4
+conf t
+ip access-list extended ACL4_WEB
+permit tcp any host 172.16.105.50 eq 80   
+permit tcp any host 172.16.105.50 eq 443 
+permit tcp any host 172.16.68.50 eq 80   
+permit tcp any host 172.16.68.50 eq 443 
+permit tcp any host 172.16.8.50 eq 80    
+permit tcp any host 172.16.8.50 eq 443   
+permit tcp any host 172.16.102.50 eq 80   
+permit tcp any host 172.16.102.50 eq 443 
+!
+int gi0/0.100
+ip access-group ACL4_WEB in
+int gi0/1
+ip access-group ACL4_WEB in
